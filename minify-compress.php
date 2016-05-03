@@ -14,13 +14,6 @@ function minify_compress() {
             $css = str_replace(';}','}',$css);
         }
 
-        if(isset($options['replace']) && $options['replace']) { // 根据规定替换
-            $replaces = $options['replace'];
-            foreach($replaces as $find => $replace) {
-                $css = str_replace($find, $replace, $css);
-            }
-        }
-
         $css = trim($css);
         return $css;
     };
@@ -68,22 +61,25 @@ function minify_compress() {
 
     $options = get_option('wp_minify_options');
     $ext = substr(strrchr($uri, '.'), 1);
+
+	if($ext == 'css' && $options['css_replace'] && trim($options['css_replace']) != '') {
+		$replaces = $options['css_replace'];
+        $replaces = explode("\n",$replaces);
+        foreach($replaces as $partten) {
+            list($find,$replace) = explode('=>',$partten);
+            $find = trim($find);
+            $replace = trim($replace);
+			$replace = str_replace(array('{SITE_URL}','{TEMPLATE}','{STYLESHEET}'),array(site_url(),get_template(),get_stylesheet()),$replace);
+			$content = str_replace($find, $replace, $content);
+        }
+	}
+
     if($ext == 'css' && $options['css_switch'] == 1) {
         $opts = array();
         if($options['css_nl'] == 1) $opts[] = 'nr';
         if($options['css_cmm'] == 1) $opts[] = '**';
         if($options['css_ss'] == 1) $opts[] = '++';
         if($options['css_sg'] == 1) $opts[] = 's';
-        if($options['css_replace'] && trim($options['css_replace']) != '') {
-            $replaces = $options['css_replace'];
-            $replaces = explode("\n",$replaces);
-            foreach($replaces as $partten) {
-                list($find,$replace) = explode('=>',$partten);
-                $find = trim($find);
-                $replace = trim($replace);
-                $opts['replace'][$find] = $replace;
-            }
-        }
         $content = $minify_css($content,$opts);
     }
     elseif($ext == 'js' && $options['js_switch'] == 1) {
@@ -99,6 +95,12 @@ function minify_compress() {
 
     file_put_contents(dirname(WP_MINIFY).'/cache/'.md5($uri).'.'.$ext,$content,LOCK_EX);
 
+	if($ext == 'css') {
+		header('Content-type: text/css; charset=utf-8');
+	}
+	elseif($ext == 'js') {
+		header('Content-type: application/javascript; charset=utf-8');
+	}
     echo $content;
     exit;
 }

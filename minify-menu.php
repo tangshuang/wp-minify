@@ -3,7 +3,7 @@
 // 保存Minify设置的内容
 add_action('admin_init','minify_add_admin_options_submenu_save');
 function minify_add_admin_options_submenu_save(){
-    if($_GET['page'] == 'minify' && isset($_REQUEST['action']) && strpos($_REQUEST['action'],'minify-') === 0){
+    if(isset($_GET['page']) && $_GET['page'] == 'minify' && isset($_REQUEST['action']) && strpos($_REQUEST['action'],'minify-') === 0){
         check_admin_referer();
         $action = $_REQUEST['action'];
         if($action == 'minify-update') {
@@ -94,6 +94,7 @@ function minify_add_admin_options_submenu_view(){
 ../font/ => http://yourdomain.com/wp-content/themes/yourtheme/font/</pre>
                                 类似的，注意，用 => 表示替换为
                             </small></p>
+						<p><small>{SITE_URL}代表site_url(),{TEMPLATE}代表主题目录名称,{STYLESHEET}代表子主题目录名称</small></p>
                     </div>
                 </div>
                 <div class="postbox">
