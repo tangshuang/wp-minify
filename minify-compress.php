@@ -49,13 +49,13 @@ function minify_compress() {
     $uri = $_SERVER['REQUEST_URI'];
     if(strpos($uri,'/??') !== 0) return;
 
-    $scripts = substr($uri,3);
-    $scripts = explode(',',$scripts);
+    $files = substr($uri,3);
+    $files = explode(',',$files);
 
     $content = '';
-    foreach($scripts as $script) {
-        $file = ABSPATH.$script;
-        if(file_exists($file)) $content .= file_get_contents($file);
+    foreach($files as $file) {
+        $file = ABSPATH.$file;
+        if(file_exists($file)) $content .= "\r\n".file_get_contents($file);
     }
     $content = trim($content);
 
