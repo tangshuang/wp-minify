@@ -93,14 +93,45 @@ function minify_compress() {
         $content = $minify_js($content,$opts);
     }
 
-    file_put_contents(dirname(WP_MINIFY).'/cache/'.md5($uri).'.'.$ext,$content,LOCK_EX);
-
 	if($ext == 'css') {
 		header('Content-type: text/css; charset=utf-8');
 	}
 	elseif($ext == 'js') {
 		header('Content-type: application/javascript; charset=utf-8');
 	}
+
+	if($options['cache'] == 1) { // 如果开启缓存
+		header("Cache-Control: public");
+		header("Pragma: cache");
+		if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+		  $last_modified = $_SERVER['HTTP_IF_MODIFIED_SINCE'];
+		  $expire = strtotime(trim($last_modified.' +30 days'));
+		  if($expire > time()) {
+			header("Expires: ".gmdate("D, d M Y H:i:s",$expire)." GMT");
+			header("Last-Modified: $last_modified",true,304);
+			exit;
+		  }
+		}
+		else {
+		  header("Expires: ".gmdate("D, d M Y H:i:s",strtotime('+30 days'))." GMT");
+		  header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+		}
+	}
+
+	if($options['cdn_switch'] == 1) {
+		$local_host = $options['cdn_find']; //博客域名
+		$cdn_host = $options['cdn_replace']; //七牛域名
+		$cdn_exts   = $options['cdn_exts']; //扩展名（使用|分隔）
+		$cdn_dirs   = $options['cdn_dirs']; //目录（使用|分隔）
+		$cdn_dirs   = str_replace('-', '\-', $cdn_dirs);
+		$regex	=  '/'.str_replace('/','\/',$local_host).'\/(('.$cdn_dirs.')\/[^\s\?\\\'\"\;\>\<]{1,}\.('.$cdn_exts.'))/';
+
+		$content =  preg_replace($regex,$cdn_host.'/$1',$content);
+	}
+	
     echo $content;
+	if($options['file']) {
+		file_put_contents(dirname(WP_MINIFY).'/cache/'.md5($uri).'.'.$ext,$content,LOCK_EX);
+	}
     exit;
 }

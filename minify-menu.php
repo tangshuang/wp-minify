@@ -48,9 +48,10 @@ function minify_add_admin_options_submenu_view(){
                         <p><small>关闭的时候，使用单个的文件一个一个链入，开启的情况下，合并为一个文件。</small></p>
                     </div>
                     <div class="inside">
-                        <h4>清空</h4>
-                        <p><a href="<?php echo add_query_arg(array('action' => 'minify-clean','_wpnoce' => wp_create_nonce())); ?>" class="button">清空缓存</a></p>
-                        <p><small>当你修改了脚本之后，可以清空，当然，也可以自己去删除对应的文件，如果你知道是哪一个的话。</small></p>
+						<h4>缓存</h4>
+						<p><select name="minify[cache]"><option value="0" <?php selected($options['cache'],0); ?>>关闭</option><option value="1" <?php selected($options['cache'],1); ?>>开启</option></select>HTTP缓存功能</p>
+						<p><select name="minify[file]"><option value="0" <?php selected($options['file'],0); ?>>关闭</option><option value="1" <?php selected($options['file'],1); ?>>开启</option></select>文件缓存功能 <a href="<?php echo add_query_arg(array('action' => 'minify-clean','_wpnoce' => wp_create_nonce())); ?>" class="button">清空文件缓存</a></p>
+                        <p><small>可以通过Ctrl+F5强制刷新页面来更新HTTP缓存。当你修改了脚本之后，也可以自己去删除对应的文件，如果你知道是哪一个的话。</small></p>
                     </div>
                 </div>
                 <div class="postbox">
@@ -73,6 +74,16 @@ function minify_add_admin_options_submenu_view(){
                 </div>
                 <div class="postbox">
                     <h3>CSS规则</h3>
+					<div class="inside">
+                        <h4>路径替换</h4>
+                        <p><textarea name="minify[css_replace]" class="large-text" rows="8"><?php echo stripcslashes($options['css_replace']); ?></textarea></p>
+                        <p><small>如果你的css中引用了图片之类的，就要进行路径替换，否则css无法引用到正确的图片位置。比如我们可以这样进行设置：
+<pre>../img/ => http://yourdomain.com/wp-content/themes/yourtheme/img/
+../font/ => http://yourdomain.com/wp-content/themes/yourtheme/font/</pre>
+                                类似的，注意，用 => 表示替换为
+                            </small></p>
+						<p><small>{SITE_URL}代表site_url(),{TEMPLATE}代表主题目录名称,{STYLESHEET}代表子主题目录名称</small></p>
+                    </div>
                     <div class="inside">
                         <h4>压缩</h4>
                         <p><select name="minify[css_switch]"><option value="0" <?php selected($options['css_switch'],0); ?>>关闭</option><option value="1" <?php selected($options['css_switch'],1); ?>>开启</option></select>Javascript压缩功能</p>
@@ -86,17 +97,18 @@ function minify_add_admin_options_submenu_view(){
                         <p><input type="checkbox" name="minify[css_sg]" value="1" <?php checked($options['css_sg'],1); ?>> 去除多余元素，比如<code> : </code>，把:前后的空格去除，比如<code>;}</code>把}前面的;去掉</p>
                         <p><small>仅在上面的压缩功能生效的时候有效。</small></p>
                     </div>
-                    <div class="inside">
-                        <h4>路径替换</h4>
-                        <p><textarea name="minify[css_replace]" class="large-text" rows="8"><?php echo stripcslashes($options['css_replace']); ?></textarea></p>
-                        <p><small>如果你的css中引用了图片之类的，就要进行路径替换，否则css无法引用到正确的图片位置。比如我们可以这样进行设置：
-                            <pre>../img/ => http://yourdomain.com/wp-content/themes/yourtheme/img/
-../font/ => http://yourdomain.com/wp-content/themes/yourtheme/font/</pre>
-                                类似的，注意，用 => 表示替换为
-                            </small></p>
-						<p><small>{SITE_URL}代表site_url(),{TEMPLATE}代表主题目录名称,{STYLESHEET}代表子主题目录名称</small></p>
-                    </div>
                 </div>
+				<div class="postbox">
+					<h3>其他规则</h3>
+					<div class="inside">
+						<h4>CDN</h4>
+						<p><select name="minify[cdn_switch]"><option value="0" <?php selected($options['cdn_switch'],0); ?>>关闭</option><option value="1" <?php selected($options['cdn_switch'],1); ?>>开启</option></select>CDN镜像替换功能</p>
+						<p>要替换的URL头：<input type="text" name="minify[cdn_find]" class="regular-text" value="<?php echo $options['cdn_find']; ?>" placeholder="<?php echo home_url(); ?>"></p>
+						<p>URL头替换为：<input type="text" name="minify[cdn_replace]" class="regular-text" value="<?php echo $options['cdn_replace']; ?>" placeholder="http://xxx.cdn.qiniu.com"></p>
+						<p>要替换的目录：<input type="text" name="minify[cdn_dirs]" class="regular-text" value="<?php echo $options['cdn_dirs']; ?>" placeholder="wp-content|wp-includes"></p>
+						<p>要替换的文件后缀：<input type="text" name="minify[cdn_exts]" class="regular-text" value="<?php echo $options['cdn_exts']; ?>" placeholder="png|jpg|jpeg|gif|PNG|JPG|JPEG|GIF"></p>
+					</div>
+				</div>
                 <div class="postbox">
                     <h3>说明</h3>
                     <div class="inside">
