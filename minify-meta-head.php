@@ -37,9 +37,9 @@ function wp_minify_css($files = array()) {
 // Minify加载
 class wp_minify_css_action {
 	private $files;
-	function __construct($files) {
+	function __construct($files,$hook = 'wp_head') {
 		$this->files = $files;
-		add_action('wp_head',array($this,'css_action'));
+		add_action($hook,array($this,'css_action'));
 	}
 	function css_action() {
 		$files = $this->files;
@@ -57,9 +57,9 @@ class wp_minify_css_action {
 
 class wp_minify_js_action {
 	private $files;
-	function __construct($files) {
+	function __construct($files,$hook = 'wp_footer') {
 		$this->files = $files;
-		add_action('wp_footer',array($this,'js_action'));
+		add_action($hook,array($this,'js_action'));
 	}
 	function js_action() {
 		$files = $this->files;
@@ -74,3 +74,11 @@ class wp_minify_js_action {
 		}
 	}
 }
+
+// function add_minify_css_mobile($files) {
+// 	new wp_minify_css_action($files);
+// }
+// function add_minify_js_mobile($files = array()) {
+// 	array_unshift($files,'/wp-content/themes/yourtheme/js/jquery-2.1.4.min.js');
+// 	new wp_minify_js_action($files,'wp_head');
+// }

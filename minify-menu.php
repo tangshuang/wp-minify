@@ -86,7 +86,7 @@ function minify_add_admin_options_submenu_view(){
                     </div>
                     <div class="inside">
                         <h4>压缩</h4>
-                        <p><select name="minify[css_switch]"><option value="0" <?php selected($options['css_switch'],0); ?>>关闭</option><option value="1" <?php selected($options['css_switch'],1); ?>>开启</option></select>Javascript压缩功能</p>
+                        <p><select name="minify[css_switch]"><option value="0" <?php selected($options['css_switch'],0); ?>>关闭</option><option value="1" <?php selected($options['css_switch'],1); ?>>开启</option></select>CSS压缩功能</p>
                         <p><small>仅在上面开启Minify功能时生效。关闭的情况下，仅连接文件内容，不进行压缩，原始代码将按原本的情况输出。</small></p>
                     </div>
                     <div class="inside">
