@@ -12,7 +12,9 @@ Origin: https://github.com/tangshuang/wp-minify
 
 define('WP_MINIFY',__FILE__);
 
-// 菜单
-require 'minify-menu.php';
+
+require 'minify-cdn.php';
 require 'minify-compress.php';
 require 'minify-meta-head.php';
+
+require 'minify-menu.php';

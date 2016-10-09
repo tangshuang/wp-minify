@@ -19,18 +19,20 @@ function minify_compress() {
     };
 
     $minify_js = function($js,$options = array()) {
-        if(in_array('**',$options)) $js = preg_replace('#\/\*[^*]*\*+([^/][^*]*\*+)*\/#isU','',$js); // 去除块级注释
-        if(in_array('nr',$options)) $js = preg_replace("/([\r]\n)+/","\r\n",$js); // 合并连续的换行
-        if(in_array('++',$options)) $js = preg_replace("/\s+/"," ",$js); // 合并连续的空格
-
         if(in_array('//',$options)) { // 去除行级注释
-            $js = preg_replace("/^\/\/[^\n]*\n/","",$js);
             $js = str_replace('http://','【:??】',$js);
             $js = str_replace('https://','【s:??】',$js);
+
+            $js = preg_replace("/^\/\/[^\n]*\n/","",$js);
             $js = preg_replace("/([\s|;|\(|\)|\{|\}])\/\/[^\n]*\n/","$1",$js);
+            
             $js = str_replace('【:??】','http://',$js);
             $js = str_replace('【s:??】','https://',$js);
         }
+
+        if(in_array('**',$options)) $js = preg_replace('#\/\*[^*]*\*+([^/][^*]*\*+)*\/#isU','',$js); // 去除块级注释
+        if(in_array('nr',$options)) $js = preg_replace("/([\r]\n)+/","\r\n",$js); // 合并连续的换行
+        if(in_array('++',$options)) $js = preg_replace("/\s+/"," ",$js); // 合并连续的空格
 
         if(in_array('r',$options)) { // 去除多余的换行
             $js = str_replace(array("\r\n","\r","\n"),';',$js);
@@ -119,19 +121,14 @@ function minify_compress() {
 	}
 
 	if($options['cdn_switch'] == 1) {
-		$local_host = $options['cdn_find']; //博客域名
-		$cdn_host = $options['cdn_replace']; //七牛域名
-		$cdn_exts   = $options['cdn_exts']; //扩展名（使用|分隔）
-		$cdn_dirs   = $options['cdn_dirs']; //目录（使用|分隔）
-		$cdn_dirs   = str_replace('-', '\-', $cdn_dirs);
-		$regex	=  '/'.str_replace('/','\/',$local_host).'\/(('.$cdn_dirs.')\/[^\s\?\\\'\"\;\>\<]{1,}\.('.$cdn_exts.'))/';
-
-		$content =  preg_replace($regex,$cdn_host.'/$1',$content);
+	    $content = minify_cdn_replace_url($content);
 	}
 	
     echo $content;
-	if($options['file']) {
+
+	if($options['file'] == 1) {
 		file_put_contents(dirname(WP_MINIFY).'/cache/'.md5($uri).'.'.$ext,$content,LOCK_EX);
 	}
-    exit;
+
+	exit;
 }
