@@ -102,7 +102,7 @@ function minify_add_admin_options_submenu_view(){
 					<h3>其他规则</h3>
 					<div class="inside">
 						<h4>CDN</h4>
-                        <p><small>注意：开启CDN功能不仅会替换生成的minify css/js文件中的url，而且连网页中的url也会被一并替换</small></p>
+                        <p><small>注意：开启CDN功能不仅会替换生成的minify css/js文件中的url，而且连网页中的url也会被一并替换。另外，开启CDN功能，即使关闭minify主开关，网页中的替换功能也会生效。</small></p>
 						<p><select name="minify[cdn_switch]"><option value="0" <?php selected($options['cdn_switch'],0); ?>>关闭</option><option value="1" <?php selected($options['cdn_switch'],1); ?>>开启</option></select>CDN镜像替换功能</p>
 						<p>要替换的URL头：<input type="text" name="minify[cdn_find]" class="regular-text" value="<?php echo $options['cdn_find']; ?>" placeholder="<?php echo home_url(); ?>"></p>
 						<p>URL头替换为：<input type="text" name="minify[cdn_replace]" class="regular-text" value="<?php echo $options['cdn_replace']; ?>" placeholder="http://xxx.cdn.qiniu.com"></p>

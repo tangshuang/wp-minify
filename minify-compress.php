@@ -2,6 +2,8 @@
 
 add_action('init','minify_compress');
 function minify_compress() {
+    $uri = $_SERVER['REQUEST_URI'];
+    if(strpos($uri,'/??') !== 0) return;
 
     $minify_css = function($css,$options = array()) {
         if(in_array('**',$options)) $css = preg_replace('#\/\*[^*]*\*+([^/][^*]*\*+)*\/#isU','',$css); // 去除注释
@@ -47,9 +49,6 @@ function minify_compress() {
         $js = trim($js);
         return $js;
     };
-
-    $uri = $_SERVER['REQUEST_URI'];
-    if(strpos($uri,'/??') !== 0) return;
 
     $files = substr($uri,3);
     $files = explode(',',$files);

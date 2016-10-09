@@ -37,48 +37,37 @@ function wp_minify_css($files = array()) {
 // Minify加载
 class wp_minify_css_action {
 	private $files;
-	function __construct($files,$hook = 'wp_head') {
+	function __construct($files = array(),$hook = 'wp_head') {
 		$this->files = $files;
-		add_action($hook,array($this,'css_action'));
+		if($hook) add_action($hook,array($this,'action'));
 	}
-	function css_action() {
+	function action() {
 		$files = $this->files;
-		if(function_exists('wp_minify_css')) {
-			wp_minify_css($files);
-		}
-		else {
-			$site_url = site_url();
-			foreach($files as $file) {
-				echo '<link rel="stylesheet" href="'.$site_url.$file.'">';
-			}
-		}
+        wp_minify_css($files);
 	}
+	function add($file) {
+	    $this->files[] = $file;
+    }
 }
 
 class wp_minify_js_action {
 	private $files;
-	function __construct($files,$hook = 'wp_footer') {
+	function __construct($files = array(),$hook = 'wp_footer') {
 		$this->files = $files;
-		add_action($hook,array($this,'js_action'));
+		if($hook) add_action($hook,array($this,'action'));
 	}
-	function js_action() {
+	function action() {
 		$files = $this->files;
-		if(function_exists('wp_minify_js')) {
-			wp_minify_js($files);
-		}
-		else {
-			$site_url = site_url();
-			foreach($files as $file) {
-				echo '<script src="'.$site_url.$file.'"></script>';
-			}
-		}
+        wp_minify_js($files);
 	}
+    function add($file) {
+        $this->files[] = $file;
+    }
 }
 
-// function add_minify_css_mobile($files) {
-// 	new wp_minify_css_action($files);
-// }
-// function add_minify_js_mobile($files = array()) {
-// 	array_unshift($files,'/wp-content/themes/yourtheme/js/jquery-2.1.4.min.js');
-// 	new wp_minify_js_action($files,'wp_head');
-// }
+/**
+ * 两个action类并没有直接被使用，而是需要你在主题开发时实例化它们才会被调用。以wp_minify_js_action为例，可以在主题的wp_head()之前执行如下：
+ * $wp_minify_js = new wp_minify_js_action(array('/wp-content/themes/yourtheme/js/jquery-2.1.4.min.js','/wp-content/themes/yourtheme/js/base.js'),'wp_head');
+ * 在这个基础上，还可以调用$wp_minify_js->add('/wp-content/themes/yourtheme/js/another.js');继续追加脚本，实例化的时候可以hook参数为false，再在需要的时候调用$wp_js->action();
+ * 这样就会直接在wp_head处输出对应的<script>标签，你可以在自己的主题functions.php中使用这个实现更加丰富的调用方式，这看你自己的创造力
+ */

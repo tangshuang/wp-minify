@@ -16,3 +16,21 @@ WordPress静态化文件合并插件，把你的多个css和js文件合并为一
 ```
 
 输出css的方法是一样的，只不过要使用另外一个函数``wp_minify_css()``。函数的参数是一个数组，数组内部的元素是脚本文件的路径，以WordPress安装目录为根目录，写入完整的相对路径。
+
+此外提供另外一种逐一添加的形式：
+
+```
+<?php
+// 方法1
+$wp_js = new wp_minify_js_action(array('/wp-content/themes/yourtheme/js/base.js','/wp-content/themes/yourtheme/js/module.js','/wp-content/themes/yourtheme/js/others.js'),'wp_head');
+
+// 方法2
+$wp_js = new wp_minify_js_action(array(),false);
+$wp_js->add('/wp-content/themes/yourtheme/js/base.js');
+$wp_js->add('/wp-content/themes/yourtheme/js/1.js');
+$wp_js->add('/wp-content/themes/yourtheme/js/2.js');
+...
+$wp_js->action(); // 输出结果
+```
+
+甚至，你可以利用这些方法，在自己的主题中进行更加灵活的开发。
