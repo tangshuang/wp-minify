@@ -1,4 +1,4 @@
-=== WP MINIFY STATIC ===
+﻿=== WP MINIFY STATIC ===
 Contributors: 否子戈
 Donate link: http://www.tangshuang.net/wp-minify
 Tags: 合并,压缩,静态资源,加速
@@ -30,10 +30,10 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Changelog ==
 
-= 1.0.1 =
-精简插件，成为一个轻量级的备份插件，删除广告、通知等不必要的功能，提供一个资源调用开关选项。
+= 1.0.0 =
+成为正式的发布版本。
 
 == Upgrade Notice ==
 
-= 1.0.1 =
-精简插件，成为一个轻量级的备份插件，删除广告、通知等不必要的功能，提供一个资源调用开关选项。
+= 1.0.0 =
+成为正式的发布版本。
