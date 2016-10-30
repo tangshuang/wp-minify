@@ -2,10 +2,11 @@
 
 function wp_minify_js($files = array()) {
     $options = get_option('wp_minify_options');
+    $version = '?version='.get_option('wp_minify_version');
     if($options['switch'] != 1) {
         $home_url = home_url();
         foreach($files as $file) {
-            echo '<script src="'.$home_url.$file.'"></script>'."\r\n";
+            echo '<script src="'.$home_url.$file.($options['tail'] == 1 ? $version : '').'"></script>'."\r\n";
         }
         return;
     }
@@ -14,15 +15,16 @@ function wp_minify_js($files = array()) {
     $file = dirname(WP_MINIFY).'/cache/'.md5($uri).'.js';
     if(file_exists($file)) $url = plugins_url('/cache/'.md5($uri).'.js',WP_MINIFY);
     else $url = home_url($uri);
-    echo '<script src="'.$url.'"></script>';
+    echo '<script src="'.$url.($options['tail'] == 1 ? $version : '').'"></script>';
 }
 
 function wp_minify_css($files = array()) {
     $options = get_option('wp_minify_options');
+    $version = '?version='.get_option('wp_minify_version');
     if($options['switch'] != 1) {
         $home_url = home_url();
         foreach($files as $file) {
-            echo '<link rel="stylesheet" href="'.$home_url.$file.'">'."\r\n";
+            echo '<link rel="stylesheet" href="'.$home_url.$file.($options['tail'] == 1 ? $version : '').'">'."\r\n";
         }
         return;
     }
@@ -31,7 +33,7 @@ function wp_minify_css($files = array()) {
     $file = dirname(WP_MINIFY).'/cache/'.md5($uri).'.css';
     if(file_exists($file)) $url = plugins_url('/cache/'.md5($uri).'.css',WP_MINIFY);
     else $url = home_url($uri);
-    echo '<link rel="stylesheet" href="'.$url.'">';
+    echo '<link rel="stylesheet" href="'.$url.($options['tail'] == 1 ? $version : '').'">';
 }
 
 // Minify加载

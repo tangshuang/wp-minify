@@ -30,10 +30,16 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Changelog ==
 
+= 1.0.1 =
+增加url尾巴功能。
+
 = 1.0.0 =
 成为正式的发布版本。
 
 == Upgrade Notice ==
+
+= 1.0.1 =
+增加url尾巴功能。
 
 = 1.0.0 =
 成为正式的发布版本。

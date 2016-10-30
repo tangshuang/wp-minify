@@ -4,7 +4,7 @@
 Plugin Name: WP MINIFY STATIC
 Plugin URI: http://www.tangshuang.net/wp-minify
 Description: 为你的博客提供javascript和css压缩服务
-Version: 1.0.0
+Version: 1.0.1
 Author: 否子戈
 Author URI: http://www.tangshuang.net
 Origin: https://github.com/tangshuang/wp-minify
