@@ -2,11 +2,11 @@
 
 function wp_minify_js($files = array()) {
     $options = get_option('wp_minify_options');
-    $version = '?version='.get_option('wp_minify_version');
+    $version = get_option('wp_minify_version');
     if($options['switch'] != 1) {
         $home_url = home_url();
         foreach($files as $file) {
-            echo '<script src="'.$home_url.$file.($options['tail'] == 1 ? $version : '').'"></script>'."\r\n";
+            echo '<script src="'.$home_url.$file.($options['tail'] == 1 && $version ? '?ver='.$version : '').'"></script>'."\r\n";
         }
         return;
     }
@@ -14,7 +14,7 @@ function wp_minify_js($files = array()) {
     $uri = '/??'.implode(',',$files);
     $file = WP_CONTENT_DIR.DIRECTORY_SEPARATOR.WP_MINIFY_CACHE_DIR.DIRECTORY_SEPARATOR.md5($uri).'.js';
     if(file_exists($file)) {
-        $url = content_url(WP_MINIFY_CACHE_DIR.'/'.md5($uri).'.js'.($options['tail'] == 1 ? $version : ''));
+        $url = content_url(WP_MINIFY_CACHE_DIR.'/'.md5($uri).'.js'.($options['tail'] == 1 && $version ? $version : ''));
     }
     else {
         $url = home_url($uri);
@@ -24,11 +24,11 @@ function wp_minify_js($files = array()) {
 
 function wp_minify_css($files = array()) {
     $options = get_option('wp_minify_options');
-    $version = '?version='.get_option('wp_minify_version');
+    $version = get_option('wp_minify_version');
     if($options['switch'] != 1) {
         $home_url = home_url();
         foreach($files as $file) {
-            echo '<link rel="stylesheet" href="'.$home_url.$file.($options['tail'] == 1 ? $version : '').'">'."\r\n";
+            echo '<link rel="stylesheet" href="'.$home_url.$file.($options['tail'] == 1 && $version ? '?ver='.$version : '').'">'."\r\n";
         }
         return;
     }
@@ -36,7 +36,7 @@ function wp_minify_css($files = array()) {
     $uri = '/??'.implode(',',$files);
     $file = WP_CONTENT_DIR.DIRECTORY_SEPARATOR.WP_MINIFY_CACHE_DIR.DIRECTORY_SEPARATOR.md5($uri).'.css';
     if(file_exists($file)) {
-        $url = content_url(WP_MINIFY_CACHE_DIR.'/'.md5($uri).'.css'.($options['tail'] == 1 ? $version : ''));
+        $url = content_url(WP_MINIFY_CACHE_DIR.'/'.md5($uri).'.css'.($options['tail'] == 1 && $version ? $version : ''));
     }
     else {
         $url = home_url($uri);

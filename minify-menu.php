@@ -21,6 +21,9 @@ function minify_add_admin_options_submenu_save(){
                 }
             }
         }
+        elseif($action == 'minify-version') {
+            update_option('wp_minify_version',date('YmdHis'));
+        }
         wp_redirect(admin_url('options-general.php?page=minify&saved=true&time='.time()));
         exit;
     }
@@ -58,7 +61,7 @@ function minify_add_admin_options_submenu_view(){
                     </div>
                     <div class="inside">
                         <h4>尾巴</h4>
-                        <p><select name="minify[tail]"><option value="0" <?php selected($options['tail'],0); ?>>关闭</option><option value="1" <?php selected($options['tail'],1); ?>>开启</option></select>尾巴功能</p>
+                        <p><select name="minify[tail]"><option value="0" <?php selected($options['tail'],0); ?>>关闭</option><option value="1" <?php selected($options['tail'],1); ?>>开启</option></select>尾巴功能 <a href="<?php echo add_query_arg(array('action' => 'minify-version','_wpnoce' => wp_create_nonce())); ?>" class="button">更新版本</a></p>
                         <p><small>开启尾巴会在输出的css/js文件的url后面跟上一个<code>?version=<?php echo date('YmdHis'); ?></code>参数，方便更新和调试。生成缓存文件的时候会自动更新版本。</small></p>
                     </div>
                 </div>

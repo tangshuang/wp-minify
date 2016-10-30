@@ -30,6 +30,9 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Changelog ==
 
+= 1.0.4 =
+增加一个更新文件版本tail的按钮。
+
 = 1.0.3 =
 把缓存文件移动到wp-content/cache，防止升级插件的时候缓存也被删除。
 
@@ -40,6 +43,9 @@ url尾巴功能。
 成为正式的发布版本。
 
 == Upgrade Notice ==
+
+= 1.0.4 =
+增加一个更新文件版本tail的按钮。
 
 = 1.0.3 =
 把缓存文件移动到wp-content/cache，防止升级插件的时候缓存也被删除。
