@@ -126,7 +126,14 @@ function minify_compress() {
     echo $content;
 
 	if($options['file'] == 1) {
-		file_put_contents(dirname(WP_MINIFY).'/cache/'.md5($uri).'.'.$ext,$content,LOCK_EX);
+        $dir = WP_CONTENT_DIR.DIRECTORY_SEPARATOR.WP_MINIFY_CACHE_DIR;
+        $file = $dir.DIRECTORY_SEPARATOR.md5($uri).'.'.$ext;
+        if(!is_dir($dir)) {
+            mkdir($dir,0777);
+        }
+        if(file_put_contents($file,$content,LOCK_EX)) {
+            update_option('wp_minify_version',date('YmdHis'));
+        }
 	}
 
 	exit;

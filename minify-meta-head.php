@@ -12,10 +12,14 @@ function wp_minify_js($files = array()) {
     }
 
     $uri = '/??'.implode(',',$files);
-    $file = dirname(WP_MINIFY).'/cache/'.md5($uri).'.js';
-    if(file_exists($file)) $url = plugins_url('/cache/'.md5($uri).'.js',WP_MINIFY);
-    else $url = home_url($uri);
-    echo '<script src="'.$url.($options['tail'] == 1 ? $version : '').'"></script>';
+    $file = WP_CONTENT_DIR.DIRECTORY_SEPARATOR.WP_MINIFY_CACHE_DIR.DIRECTORY_SEPARATOR.md5($uri).'.js';
+    if(file_exists($file)) {
+        $url = content_url(WP_MINIFY_CACHE_DIR.'/'.md5($uri).'.js'.($options['tail'] == 1 ? $version : ''));
+    }
+    else {
+        $url = home_url($uri);
+    }
+    echo '<script src="'.$url.'"></script>';
 }
 
 function wp_minify_css($files = array()) {
@@ -30,10 +34,14 @@ function wp_minify_css($files = array()) {
     }
 
     $uri = '/??'.implode(',',$files);
-    $file = dirname(WP_MINIFY).'/cache/'.md5($uri).'.css';
-    if(file_exists($file)) $url = plugins_url('/cache/'.md5($uri).'.css',WP_MINIFY);
-    else $url = home_url($uri);
-    echo '<link rel="stylesheet" href="'.$url.($options['tail'] == 1 ? $version : '').'">';
+    $file = WP_CONTENT_DIR.DIRECTORY_SEPARATOR.WP_MINIFY_CACHE_DIR.DIRECTORY_SEPARATOR.md5($uri).'.css';
+    if(file_exists($file)) {
+        $url = content_url(WP_MINIFY_CACHE_DIR.'/'.md5($uri).'.css'.($options['tail'] == 1 ? $version : ''));
+    }
+    else {
+        $url = home_url($uri);
+    }
+    echo '<link rel="stylesheet" href="'.$url.'">';
 }
 
 // Minify加载

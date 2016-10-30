@@ -8,15 +8,17 @@ function minify_add_admin_options_submenu_save(){
         $action = $_REQUEST['action'];
         if($action == 'minify-update') {
             $options = $_POST['minify'];
-            update_option('wp_minify_version',date('YmdHis'));
             update_option('wp_minify_options',$options) || add_option('wp_minify_options',$options);
         }
         elseif($action == 'minify-clean') {
-            $dir = dirname(WP_MINIFY).'/cache/';
-            $op = dir($dir);
-            while(false != ($item = $op->read())) {
-                if($item == '.' || $item == '..') continue;
-                if(is_file($dir.$item)) unlink($dir.$item);
+            $dir = WP_CONTENT_DIR.DIRECTORY_SEPARATOR.WP_MINIFY_CACHE_DIR;
+            if(is_dir($dir)) {
+                $op = dir($dir);
+                while(false != ($item = $op->read())) {
+                    if($item == '.' || $item == '..') continue;
+                    $file = $dir.DIRECTORY_SEPARATOR.$item;
+                    if(is_file($file)) unlink($file);
+                }
             }
         }
         wp_redirect(admin_url('options-general.php?page=minify&saved=true&time='.time()));
@@ -51,13 +53,13 @@ function minify_add_admin_options_submenu_view(){
                     <div class="inside">
 						<h4>缓存</h4>
 						<p><select name="minify[cache]"><option value="0" <?php selected($options['cache'],0); ?>>关闭</option><option value="1" <?php selected($options['cache'],1); ?>>开启</option></select>HTTP缓存功能</p>
-						<p><select name="minify[file]"><option value="0" <?php selected($options['file'],0); ?>>关闭</option><option value="1" <?php selected($options['file'],1); ?>>开启</option></select>文件缓存功能 <a href="<?php echo add_query_arg(array('action' => 'minify-clean','_wpnoce' => wp_create_nonce())); ?>" class="button">清空文件缓存</a></p>
+						<p><select name="minify[file]"><option value="0" <?php selected($options['file'],0); ?>>关闭</option><option value="1" <?php selected($options['file'],1); ?>>开启</option></select>文件缓存功能，请确保你的wp-content目录有可写权限，缓存文件将放在wp-content/cache目录中。 <a href="<?php echo add_query_arg(array('action' => 'minify-clean','_wpnoce' => wp_create_nonce())); ?>" class="button">清空文件缓存</a></p>
                         <p><small>可以通过Ctrl+F5强制刷新页面来更新HTTP缓存。当你修改了脚本之后，也可以自己去删除对应的文件，如果你知道是哪一个的话。</small></p>
                     </div>
                     <div class="inside">
                         <h4>尾巴</h4>
                         <p><select name="minify[tail]"><option value="0" <?php selected($options['tail'],0); ?>>关闭</option><option value="1" <?php selected($options['tail'],1); ?>>开启</option></select>尾巴功能</p>
-                        <p><small>开启尾巴会在输出的css/js文件的url后面跟上一个<code>?version=<?php echo date('YmdHis'); ?></code>参数，方便更新和调试。提交的时候会自动更新版本。</small></p>
+                        <p><small>开启尾巴会在输出的css/js文件的url后面跟上一个<code>?version=<?php echo date('YmdHis'); ?></code>参数，方便更新和调试。生成缓存文件的时候会自动更新版本。</small></p>
                     </div>
                 </div>
                 <div class="postbox">
