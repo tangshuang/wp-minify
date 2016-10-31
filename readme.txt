@@ -30,6 +30,9 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 == Changelog ==
 
+= 1.0.5 =
+修复Tail的bug。
+
 = 1.0.4 =
 增加一个更新文件版本tail的按钮。
 
@@ -43,6 +46,9 @@ url尾巴功能。
 成为正式的发布版本。
 
 == Upgrade Notice ==
+
+= 1.0.5 =
+修复Tail的bug。
 
 = 1.0.4 =
 增加一个更新文件版本tail的按钮。

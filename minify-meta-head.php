@@ -14,7 +14,7 @@ function wp_minify_js($files = array()) {
     $uri = '/??'.implode(',',$files);
     $file = WP_CONTENT_DIR.DIRECTORY_SEPARATOR.WP_MINIFY_CACHE_DIR.DIRECTORY_SEPARATOR.md5($uri).'.js';
     if(file_exists($file)) {
-        $url = content_url(WP_MINIFY_CACHE_DIR.'/'.md5($uri).'.js'.($options['tail'] == 1 && $version ? $version : ''));
+        $url = content_url(WP_MINIFY_CACHE_DIR.'/'.md5($uri).'.js'.($options['tail'] == 1 && $version ? '?ver='.$version : ''));
     }
     else {
         $url = home_url($uri);
@@ -36,7 +36,7 @@ function wp_minify_css($files = array()) {
     $uri = '/??'.implode(',',$files);
     $file = WP_CONTENT_DIR.DIRECTORY_SEPARATOR.WP_MINIFY_CACHE_DIR.DIRECTORY_SEPARATOR.md5($uri).'.css';
     if(file_exists($file)) {
-        $url = content_url(WP_MINIFY_CACHE_DIR.'/'.md5($uri).'.css'.($options['tail'] == 1 && $version ? $version : ''));
+        $url = content_url(WP_MINIFY_CACHE_DIR.'/'.md5($uri).'.css'.($options['tail'] == 1 && $version ? '?ver='.$version : ''));
     }
     else {
         $url = home_url($uri);
